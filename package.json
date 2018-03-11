@@ -1,0 +1,24 @@
+{
+  "name": "tm-chain",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev-test": "nodemon dev-test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tapiwam/tm-chain.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tapiwam/tm-chain/issues"
+  },
+  "homepage": "https://github.com/tapiwam/tm-chain#readme",
+  "devDependencies": {
+    "nodemon": "^1.17.1"
+  }
+}
