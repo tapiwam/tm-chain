@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const Blockchain = require('../blockchain');
+const P2pServer = require('./p2p-server');
 
 // Default 3001 port
 const HTTP_PORT = process.env.HTTP_PORT || 3001;
@@ -13,6 +14,9 @@ app.use(bodyParser.json());
 
 // Initialize the blockchain
 const bc = new Blockchain();
+
+// P2P server to distribute and sync blockchain
+const p2pServer = new P2pServer(bc);
 
 // Endpoint to get the blockchain
 app.get('/blocks', (req, res) => {
@@ -30,3 +34,4 @@ app.post('/mine', (req, res) => {
 
 // Open up the server in given HTTP_PORT
 app.listen(HTTP_PORT, ()=> console.log(`Listening on port ${HTTP_PORT}`));
+p2pServer.listen();
