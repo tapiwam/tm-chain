@@ -1,10 +1,19 @@
 const Block = require('./block');
 
 class Blockchain {
+
+    /**
+     * Initialize the block chain with a genesis block
+     */
     constructor() {
         this.chain = [Block.genesis()];
     }
 
+    /**
+     * Add a new block to the chain
+     * @param data
+     * @returns {*}
+     */
     addBlock(data) {
         const block = Block.mineBlock(this.chain[this.chain.length-1], data);
         this.chain.push(block);
@@ -12,6 +21,11 @@ class Blockchain {
         return block;
     }
 
+    /**
+     * Validate a new incoming chain and ensure that the genesis block is correct and that the data inside each block is valid
+     * @param chain
+     * @returns {boolean}
+     */
     isValidChain(chain){
 
         // Check to make sure that the incoming block has a valid genesis block
@@ -28,10 +42,28 @@ class Blockchain {
             ){
                 return false;
             }
-
-            return true;
         }
 
+        return true;
+    }
+
+    /**
+     * Replace the chain only if the length of the chain is longer than the existing chain
+     * @param newChain
+     */
+    replaceChain(newChain){
+        if(newChain.length <= this.chain.length){
+            console.warn("Received chain is not longer than the current chain.");
+            return;
+        } else {
+            if(!this.isValidChain(newChain)){
+                console.error("The received chain is not valid.");
+                return;
+            }
+        }
+
+        console.info("Replacing block chain with the new chain.");
+        this.chain = newChain;
     }
 }
 
