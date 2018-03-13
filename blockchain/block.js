@@ -1,4 +1,4 @@
-const SHA256 = require('crypto-js/sha256');
+const ChainUtil = require('../chain-util');
 const { DIFFICULTY, MINE_RATE } = require('../config');
 
 class Block {
@@ -21,7 +21,7 @@ class Block {
         return `Block -
         Timestamp : ${this.timestamp}
         LastHash  : ${this.lastHash.substring(0,10)}
-        Hash      : ${this.hash.substring(0,10)}
+        Hash      : ${Block.hash.substring(0,10)}
         Nonce     : ${this.nonce}
         difficulty: ${this.difficulty}
         Data      : ${this.data}`;
@@ -59,18 +59,6 @@ class Block {
     }
 
     /**
-     * Calculate the hash given passed parameters
-     * @param timestamp
-     * @param lastHash
-     * @param data
-     * @param nonce
-     * @param difficulty
-     */
-    static hash(timestamp, lastHash, data, nonce, difficulty){
-        return SHA256(`${timestamp}${lastHash}${data}${nonce}${difficulty}`).toString();
-    }
-
-    /**
      * Generate the hash of a given block
      * @param block
      * @returns {*}
@@ -80,6 +68,16 @@ class Block {
         return Block.hash( timestamp, lastHash, data, nonce, difficulty );
     }
 
+    static hash(timestamp, lastHash, data, nonce, difficulty){
+        return ChainUtil.hash(`${timestamp}${lastHash}${data}${nonce}${difficulty}`);
+    }
+
+    /**
+     * Adjust the difficulty to keep the block time withing a certain time range
+     * @param lastBlock
+     * @param currentTime
+     * @returns {*}
+     */
     static adjustDifficulty (lastBlock, currentTime){
         let { difficulty } = lastBlock;
         difficulty = lastBlock.timestamp + MINE_RATE > currentTime ? difficulty + 1 : difficulty - 1;

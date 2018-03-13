@@ -23,6 +23,10 @@ describe('Transaction', () => {
             .toEqual(amount);
     });
 
+    it('inputs the balance of the wallet', () => {
+        expect(transaction.input.amount).toEqual(wallet.balance);
+    })
+
     describe('transaction where the amount exceeds the balance', () => {
         beforeEach( () => {
             amount = 50000;
