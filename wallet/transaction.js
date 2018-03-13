@@ -26,8 +26,9 @@ class Transaction {
                 amount, // ES6 destruction format
                 address: recipient
             }
-        ])
+        ]);
 
+        return transaction;
     }
 
 }
