@@ -46,6 +46,17 @@ app.get('/transactions', (req, res) => {
     res.json(tp.transactions);
 });
 
+
+app.post('/transact', (req, res) => {
+    const { recipient, amount } = req.body;
+    const transaction = wallet.createTransaction(recipient, amount, tp);
+    // console.log("Added transaction: " + JSON.stringify(transaction));
+
+    res.redirect('/transactions');
+});
+
+
+
 // Open up the server in given HTTP_PORT
 app.listen(HTTP_PORT, ()=> console.log(`Listening on port ${HTTP_PORT}`));
 p2pServer.listen();
