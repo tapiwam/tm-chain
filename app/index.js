@@ -59,6 +59,10 @@ app.post('/transact', (req, res) => {
 });
 
 
+app.get('/public-key', (req, res) => {
+    res.json({ publicKey : wallet.publicKey});
+});
+
 
 // Open up the server in given HTTP_PORT
 app.listen(HTTP_PORT, ()=> console.log(`Listening on port ${HTTP_PORT}`));
