@@ -9,7 +9,8 @@ const peers = process.env.P2P_PEERS ? process.env.P2P_PEERS.split(',') : [];
 
 const MESSAGE_TYPES = {
     chain: 'CHAIN',
-    transaction: 'TRANSACTION'
+    transaction: 'TRANSACTION',
+    clear_transactions: 'CLEAR_TRANSACTIONS'
 }
 
 // HTTP_PORT=3002 P2P_PORT=5002 P2P_PEERS=ws://localhost:5001 npm run dev
@@ -64,6 +65,9 @@ class P2pServer {
                 case MESSAGE_TYPES.transaction:
                     this.transactionPool.updateOrAddTransaction(data.transaction);
                     break;
+                case MESSAGE_TYPES.clear_transactions:
+                    this.transactionPool.clear();
+                    break;
                 default:
                     console.log("Unknown message type received. @data.type=" + JSON.stringify(data));
                     break;
@@ -90,6 +94,7 @@ class P2pServer {
 
     // ================================
 
+
     /**
      * Broadcast a transaction to all nodes
      * @param transaction
@@ -109,6 +114,18 @@ class P2pServer {
         )));
     }
 
+    // ================================
+    /**
+     * Broadcast clear transactions to all nodes
+     * @param transaction
+     */
+    broadcastClearTransactions() {
+        this.sockets.forEach(socket => {
+            this.sendTransaction(socket, JSON.stringify({
+                type: MESSAGE_TYPES.clear_transactions
+            }));
+        });
+    }
 }
 
 module.exports = P2pServer;
