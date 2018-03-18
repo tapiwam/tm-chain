@@ -2,6 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const Blockchain = require('../blockchain');
 const P2pServer = require('./p2p-server');
+const Wallet = require('../wallet');
+const TransactionPool = require('../wallet/transaction-pool');
 
 // Default 3001 port
 const HTTP_PORT = process.env.HTTP_PORT || 3001;
@@ -15,8 +17,14 @@ app.use(bodyParser.json());
 // Initialize the blockchain
 const bc = new Blockchain();
 
+// User's Wallet
+const wallet = new Wallet();
+
+// Transaction pool
+const tp = new TransactionPool();
+
 // P2P server to distribute and sync blockchain
-const p2pServer = new P2pServer(bc);
+const p2pServer = new P2pServer(bc, tp);
 
 // Endpoint to get the blockchain
 app.get('/blocks', (req, res) => {
@@ -32,6 +40,24 @@ app.post('/mine', (req, res) => {
 
     res.redirect('/blocks');
 });
+
+// Endpoint to get transactions from the transaction pool
+app.get('/transactions', (req, res) => {
+    res.json(tp.transactions);
+});
+
+
+app.post('/transact', (req, res) => {
+    const { recipient, amount } = req.body;
+    const transaction = wallet.createTransaction(recipient, amount, tp);
+
+    p2pServer.broadcastTransaction(transaction);
+
+    // console.log("Added transaction: " + JSON.stringify(transaction));
+
+    res.redirect('/transactions');
+});
+
 
 
 // Open up the server in given HTTP_PORT
