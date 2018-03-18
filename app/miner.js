@@ -8,6 +8,7 @@ class Miner {
     }
 
     /**
+     * Mine transaction into a block
      * 1-Grab transactions
      * 2-Create block
      * 3-Sync chain using tp
