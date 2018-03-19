@@ -60,7 +60,7 @@ class P2pServer {
             const data = JSON.parse(message);
             switch (data.type) {
                 case MESSAGE_TYPES.chain:
-                    this.blockchain.replaceChain(data);
+                    this.blockchain.replaceChain(data.chain);
                     break;
                 case MESSAGE_TYPES.transaction:
                     this.transactionPool.updateOrAddTransaction(data.transaction);
