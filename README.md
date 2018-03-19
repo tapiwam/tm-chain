@@ -1,7 +1,7 @@
 # tm-chain
-This is a simple blockchain implementation written in NodeJS.
+This is a simple blockchain implementation written in NodeJS. This serves only as an introduction with a simple implementation of  a proof of work crytocurrency system.
 
-###Usage
+### Usage
 - Clone repo
 - Install dependencies using npm
 ```bash
