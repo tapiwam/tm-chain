@@ -25,6 +25,33 @@ class TransactionPool {
         return this.transactions.find(t => t.input.address === address);
     }
 
+    /**
+     * 1-Total output amount matches input amount in
+     * 2-Verify signature of every transaction
+     */
+    validTransactions(){
+        return this.transactions.filter( transaction => {
+            const outputTotal = transaction.output.reduce((total, output) => {
+                return total + output.amount;
+            }, 0);
+
+            if(transaction.input.amount !== outputTotal){
+                console.log(`Invalid transaction from ${transaction.input.address}`);
+                return;
+            }
+
+            if(!Transaction.verifyTransaction(transaction)){
+                console.log(`Invalid signature from ${transaction.input.address}`);
+                return;
+            }
+
+            return transaction;
+        })
+    }
+
+    clear(){
+        this.transactions = [];
+    }
 }
 
 module.exports = TransactionPool;

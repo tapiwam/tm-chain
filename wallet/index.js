@@ -17,10 +17,21 @@ class Wallet {
         `
     }
 
+    /**
+     * Sign data
+     * @param dataHash
+     */
     sign(dataHash){
         return this.keyPair.sign(dataHash);
     }
 
+    /**
+     * Create a transaction that is signed using the wallet's keys
+     * @param recipient
+     * @param amount
+     * @param transactionPool
+     * @returns {*}
+     */
     createTransaction(recipient, amount, transactionPool){
         if (amount > this.balance) {
             console.log(`Amount: ${amount} exceeds current balance: ${this.balance}`);
@@ -51,6 +62,16 @@ class Wallet {
         transactionPool.updateOrAddTransaction(transaction);
 
         return transaction;
+    }
+
+    /**
+     * Default blockchain wallet used to sign reward granted by the blockchain
+     * @returns {Wallet}
+     */
+    static blockchainWallet() {
+        const blockchainWallet = new this();
+        blockchainWallet.address = 'blockchain-wallet';
+        return blockchainWallet;
     }
 }
 
