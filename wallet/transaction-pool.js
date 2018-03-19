@@ -36,12 +36,12 @@ class TransactionPool {
             }, 0);
 
             if(transaction.input.amount !== outputTotal){
-                console.log(`Invalid transaction from ${transaction.input.address}`);
+                console.log(`Invalid transaction amount from @expectedAmount=${transaction.input.amount} @actual=${outputTotal} @address=${transaction.input.address}`);
                 return;
             }
 
             if(!Transaction.verifyTransaction(transaction)){
-                console.log(`Invalid signature from ${transaction.input.address}`);
+                console.log(`Invalid signature from @expected=${transaction.input.signature} @address=${transaction.input.address}`);
                 return;
             }
 
