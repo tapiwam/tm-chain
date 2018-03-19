@@ -29,7 +29,10 @@ class Blockchain {
     isValidChain(chain){
 
         // Check to make sure that the incoming block has a valid genesis block
-        if(JSON.stringify(chain[0]) !== JSON.stringify(Block.genesis())) return false;
+        if(JSON.stringify(chain[0]) !== JSON.stringify(Block.genesis())) {
+            console.log(`Genesis block is incorrect: \n@genesis=${JSON.stringify(Block.genesis())}\n@passes=${JSON.stringify(chain[0])}`);
+            return false;
+        }
 
         // Loop through each block of the passed chain and validate
         for(let i=1; i<chain.length; i++){
@@ -40,6 +43,11 @@ class Blockchain {
             if(block.lastHash !== lastBlock.hash ||
                 block.hash !== Block.blockHash(block)
             ){
+                console.log(`Break between current block and previous block: 
+                    @lastHashInBlock=${JSON.stringify(block.lastHash)}
+                    @lastHash=${JSON.stringify(lastBlock.hash)}
+                    @calculatedHash=${Block.blockHash(block)}
+                    `);
                 return false;
             }
         }
@@ -57,7 +65,7 @@ class Blockchain {
             return;
         } else {
             if(!this.isValidChain(newChain)){
-                console.error("The received chain is not valid.");
+                console.error(`The received chain is not valid.\n${JSON.stringify(newChain)}`);
                 return;
             }
         }
