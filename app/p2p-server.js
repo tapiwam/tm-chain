@@ -23,6 +23,8 @@ class P2pServer {
         this.sockets = [];
     }
 
+    // ================================
+
     listen() {
         const server = new Websocket.Server({port: P2P_PORT});
 
@@ -54,6 +56,8 @@ class P2pServer {
         this.sendChain(socket);
     }
 
+    // ================================
+
     messageHandler(socket){
         socket.on('message', message => {
 
@@ -66,6 +70,7 @@ class P2pServer {
                     this.transactionPool.updateOrAddTransaction(data.transaction);
                     break;
                 case MESSAGE_TYPES.clear_transactions:
+                    console.log(`Received signal to clear transaction pool.`);
                     this.transactionPool.clear();
                     break;
                 default:
@@ -77,6 +82,8 @@ class P2pServer {
 
         });
     }
+
+    // ================================
 
     sendChain(socket){
         socket.send(JSON.stringify({
@@ -93,7 +100,6 @@ class P2pServer {
     }
 
     // ================================
-
 
     /**
      * Broadcast a transaction to all nodes
@@ -121,7 +127,7 @@ class P2pServer {
      */
     broadcastClearTransactions() {
         this.sockets.forEach(socket => {
-            this.sendTransaction(socket, JSON.stringify({
+            socket.send(JSON.stringify({
                 type: MESSAGE_TYPES.clear_transactions
             }));
         });

@@ -2,16 +2,18 @@
 const TransactionPool = require('./transaction-pool');
 const Transaction = require('./transaction');
 const Wallet = require('./index');
+const Blockchain = require('../blockchain');
 
 describe('TransactionPool', () => {
 
-    let tp, wallet, transaction, recipient;
+    let tp, wallet, transaction, recipient, bc;
 
     beforeEach(() => {
         tp = new TransactionPool();
         wallet = new Wallet();
+        bc = new Blockchain();
 
-        transaction = wallet.createTransaction('r3c1p13nt1', 30, tp);
+        transaction = wallet.createTransaction('r3c1p13nt1', 30, bc, tp);
     });
 
     it('adds a transaction to the transaction pool', () => {
@@ -40,13 +42,16 @@ describe('TransactionPool', () => {
 
             for(let i=0 ; i<6; i++){
                 wallet = new Wallet();
-                transaction = wallet.createTransaction('r4nd0m-4ddr355', 30, tp);
+                transaction = wallet.createTransaction('r4nd0m-4ddr355', 30, bc, tp);
                 if(i%2==0){
-                    transaction.input.amount = 99999;
+                    transaction.input.amount = 999;
                 } else {
                     validTransactions.push(transaction);
                 }
             }
+
+            // console.log("Valid transactions expected: " + JSON.stringify(validTransactions));
+            // console.log("Valid transactions given: " + JSON.stringify(tp.validTransactions()));
         });
 
         it('shows a difference between valid and corrupt transactions', () => {
